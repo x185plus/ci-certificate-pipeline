@@ -21,10 +21,16 @@ jobs:
       - name: Create Test Artifact
         run: |
           mkdir -p dist
-          echo '{"name": "x185plus-provenance-demo", "version": "1.0.0", "timestamp": "'$(date -u +%FT%TZ)'"}' > dist/test-artifact.json
+          echo '{"name": "x185plus-provenance-demo", "version": "1.0.0", "engine": "X185Plus Public Attestation Route"}' > dist/test-artifact.json
           sha256sum dist/test-artifact.json
 
       - name: Attest Build Provenance (Sigstore)
         uses: actions/attest-build-provenance@v4.2.2
         with:
           subject-path: dist/test-artifact.json
+
+      - name: Upload Verified Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifact
+          path: dist/test-artifact.json
