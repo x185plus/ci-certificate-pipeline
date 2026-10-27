@@ -1,0 +1,20 @@
+{
+  "name": "ci-certificate-pipeline",
+  "version": "1.0.0",
+  "description": "Public demonstration pipeline for X185Plus cryptographic build provenance and Sigstore attestations",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/verify-build.test.mjs"
+  },
+  "keywords": [
+    "sigstore",
+    "slsa",
+    "provenance",
+    "attestation",
+    "rekor",
+    "in-toto"
+  ],
+  "author": "X185Plus Governance Systems",
+  "license": "Apache-2.0"
+}

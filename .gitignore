@@ -1,0 +1,6 @@
+dist/
+node_modules/
+test-artifact/
+*.sigstore.json
+.DS_Store
+Thumbs.db

@@ -16,10 +16,11 @@ This repository demonstrates cryptographic supply-chain build provenance attesta
 
 ### How Attestation Works
 
-1. **Build Artifact Generation**: A deterministic build artifact is produced and digested using SHA-256.
-2. **Sigstore Fulcio OIDC Attestation**: GitHub Actions requests an ephemeral short-lived X.509 signing certificate from GitHub's internal Sigstore Fulcio CA using the job's OIDC ID token.
-3. **Rekor Transparency Log Entry**: The signed DSSE envelope is published and anchored to the global [Rekor Public Transparency Log](https://rekor.sigstore.dev).
-4. **1-Click Public Verification**:
+1. **Build Artifact Generation**: `npm run build` executes [`scripts/build.mjs`](file:///scripts/build.mjs) to compile and digest the build payload using SHA-256.
+2. **Deterministic Build Test**: `npm test` executes [`test/verify-build.test.mjs`](file:///test/verify-build.test.mjs) using Node's native test runner to prove payload integrity prior to attestation.
+3. **Sigstore Fulcio OIDC Attestation**: GitHub Actions requests an ephemeral short-lived X.509 signing certificate from GitHub's internal Sigstore Fulcio CA using the job's OIDC ID token.
+4. **Rekor Transparency Log Entry**: The signed DSSE envelope is published and anchored to the global [Rekor Public Transparency Log](https://rekor.sigstore.dev).
+5. **1-Click Public Verification**:
    - Anyone can view the cryptographic attestation directly in GitHub's UI: [Attestation Ledger](https://github.com/x185plus/ci-certificate-pipeline/attestations).
    - Or verify locally via GitHub CLI:
      ```bash

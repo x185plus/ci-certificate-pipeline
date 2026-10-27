@@ -3,6 +3,8 @@ name: Test Sigstore Build Provenance
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -11,20 +13,26 @@ permissions:
   attestations: write
 
 jobs:
-  attest-test:
-    name: Sigstore Provenance Attestation
+  build-and-attest:
+    name: Build & Sigstore Provenance Attestation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create Test Artifact
-        run: |
-          mkdir -p dist
-          echo '{"name": "x185plus-provenance-demo", "version": "1.0.0", "engine": "X185Plus Public Attestation Route"}' > dist/test-artifact.json
-          sha256sum dist/test-artifact.json
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Build
+        run: npm run build
+
+      - name: Run Test Suite
+        run: npm test
 
       - name: Attest Build Provenance (Sigstore)
+        if: github.event_name != 'pull_request'
         uses: actions/attest-build-provenance@v4.2.2
         with:
           subject-path: dist/test-artifact.json
@@ -34,3 +42,20 @@ jobs:
         with:
           name: test-artifact
           path: dist/test-artifact.json
+
+      - name: Generate Job Attestation Summary
+        run: |
+          echo "### 🛡️ X185Plus Public Build & Attestation Route" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "| :--- | :--- |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Repository** | \`$GITHUB_REPOSITORY\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Commit** | [\`${GITHUB_SHA:0:10}\`](https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA) |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Artifact** | \`dist/test-artifact.json\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Attestations Ledger** | [View GitHub Attestation Ledger](https://github.com/$GITHUB_REPOSITORY/attestations) |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "#### 1-Click CLI Verification" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "gh run download --repo $GITHUB_REPOSITORY -n test-artifact" >> $GITHUB_STEP_SUMMARY
+          echo "gh attestation verify test-artifact.json --owner x185plus" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
