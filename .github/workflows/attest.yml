@@ -54,8 +54,16 @@ jobs:
           echo "| **Artifact** | \`dist/test-artifact.json\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **Attestations Ledger** | [View GitHub Attestation Ledger](https://github.com/$GITHUB_REPOSITORY/attestations) |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "#### 1-Click CLI Verification" >> $GITHUB_STEP_SUMMARY
+          echo "#### 1-Click Verification Options" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Option 1: Fully Automated (Zero Manual Steps)**" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-          echo "gh run download --repo $GITHUB_REPOSITORY -n test-artifact" >> $GITHUB_STEP_SUMMARY
-          echo "gh attestation verify test-artifact.json --owner x185plus" >> $GITHUB_STEP_SUMMARY
+          echo "npm run verify" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Option 2: Direct GitHub CLI 1-Liner**" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "gh run download --repo $GITHUB_REPOSITORY -n test-artifact; gh attestation verify test-artifact.json --owner x185plus" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> 💡 **Note on GitHub UI:** When GitHub's UI shows \`gh attestation verify --owner x185plus <filename-or-url>\`, the placeholder refers to \`test-artifact.json\` (which must be downloaded first), NOT the workflow YAML path." >> $GITHUB_STEP_SUMMARY

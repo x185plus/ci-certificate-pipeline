@@ -20,13 +20,22 @@ This repository demonstrates cryptographic supply-chain build provenance attesta
 2. **Deterministic Build Test**: `npm test` executes [`test/verify-build.test.mjs`](file:///test/verify-build.test.mjs) using Node's native test runner to prove payload integrity prior to attestation.
 3. **Sigstore Fulcio OIDC Attestation**: GitHub Actions requests an ephemeral short-lived X.509 signing certificate from GitHub's internal Sigstore Fulcio CA using the job's OIDC ID token.
 4. **Rekor Transparency Log Entry**: The signed DSSE envelope is published and anchored to the global [Rekor Public Transparency Log](https://rekor.sigstore.dev).
-5. **1-Click Public Verification**:
-   - Anyone can view the cryptographic attestation directly in GitHub's UI: [Attestation Ledger](https://github.com/x185plus/ci-certificate-pipeline/attestations).
-   - Or verify locally via GitHub CLI:
+5. **1-Click Verification**:
+   - **Automated Verification (Zero Manual Steps):**
      ```bash
-     gh run download --repo x185plus/ci-certificate-pipeline -n test-artifact
-     gh attestation verify test-artifact.json --owner x185plus
+     npm run verify
      ```
+     *(Automatically downloads the latest verified build artifact into a temporary directory, asserts the cryptographic signature against the Rekor transparency log, and prints the audit report).*
+   - **Direct GitHub CLI 1-Liner:**
+     ```bash
+     gh run download --repo x185plus/ci-certificate-pipeline -n test-artifact; gh attestation verify test-artifact.json --owner x185plus
+     ```
+   - **View on GitHub UI:**
+     [Attestation Ledger](https://github.com/x185plus/ci-certificate-pipeline/attestations)
+
+> 💡 **Note on GitHub UI `<filename-or-url>`:**  
+> When viewing attestations in GitHub's web interface, GitHub shows a generic placeholder: `gh attestation verify --owner x185plus <filename-or-url>`.  
+> Do **not** pass the workflow YAML path into this command. The command verifies the **built artifact file** (`test-artifact.json`), which must be downloaded first. Using `npm run verify` automates this entire process with zero manual steps.
 
 ### Compliance Scope & Honesty
 * **Provenance, Not Code Quality:** This attestation cryptographically proves *where* and *how* the artifact was built (isolated GitHub runner, commit SHA, workflow reference). It proves build chain immutability without making unverified runtime quality claims.

@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node --test test/verify-build.test.mjs"
+    "test": "node --test test/verify-build.test.mjs",
+    "verify": "node scripts/verify-provenance.mjs",
+    "verify:provenance": "node scripts/verify-provenance.mjs"
   },
   "keywords": [
     "sigstore",
