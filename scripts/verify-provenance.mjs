@@ -23,11 +23,11 @@ const targetFile = path.join(tmpDir, ARTIFACT_FILE);
 try {
   process.stdout.write('1. Downloading latest build artifact from GitHub Actions... ');
   execSync(`gh run download --repo ${REPO} -n ${ARTIFACT_NAME} --dir "${tmpDir}"`, { stdio: 'pipe' });
-  console.log('✓ Done');
+  console.log('Done');
 
   process.stdout.write('2. Verifying cryptographic Sigstore attestation & Rekor log... ');
   const rawOutput = execSync(`gh attestation verify "${targetFile}" --owner ${OWNER} --format json`, { stdio: 'pipe' }).toString();
-  console.log('✓ VERIFIED (Exit Code 0)\n');
+  console.log('Done\n');
 
   const bundle = JSON.parse(rawOutput);
   const result = bundle[0]?.verificationResult || {};
@@ -50,7 +50,6 @@ try {
   console.log(`Rekor Log Uri : ${tlog.uri || 'https://rekor.sigstore.dev'}`);
   console.log(`Rekor Time    : ${tlog.timestamp || 'N/A'}`);
   console.log('===========================================================');
-  console.log('\n✅ 1-Click Verification succeeded with zero manual download steps!\n');
 } catch (err) {
   console.error('\n❌ Verification Failed:', err.message);
   if (err.stderr) console.error(err.stderr.toString());
