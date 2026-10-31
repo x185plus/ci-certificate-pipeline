@@ -23,8 +23,10 @@ This repository demonstrates cryptographic supply-chain build provenance attesta
 5. **1-Click Verification**:
    - **Automated Verification (Zero Manual Steps):**
      ```bash
-     npm run verify
+     npm run verify:provenance
      ```
+   <img width="1098" height="562" alt="image" src="https://github.com/user-attachments/assets/69170058-179e-42b1-a4ef-87eb1ae09cd8" />
+
      *(Automatically downloads the latest verified build artifact into a temporary directory, asserts the cryptographic signature against the Rekor transparency log, and prints the audit report).*
    - **Direct GitHub CLI 1-Liner:**
      ```bash
