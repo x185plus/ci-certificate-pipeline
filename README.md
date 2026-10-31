@@ -40,5 +40,10 @@ This repository demonstrates cryptographic supply-chain build provenance attesta
 ### Compliance Scope & Honesty
 * **Provenance, Not Code Quality:** This attestation cryptographically proves *where* and *how* the artifact was built (isolated GitHub runner, commit SHA, workflow reference). It proves build chain immutability without making unverified runtime quality claims.
 
+
+<img width="880" height="874" alt="image" src="https://github.com/user-attachments/assets/b3589417-44a1-4c10-a47a-a9e46eda7b81" />
+
+
+
 ---
 *Maintained by X185Plus Governance Systems.*
